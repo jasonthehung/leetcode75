@@ -1,4 +1,4 @@
 # leetcode75
 
 
-https://leetcode.com/problem-list/oizxjoit/
+https://www.techinterviewhandbook.org/best-practice-questions/
