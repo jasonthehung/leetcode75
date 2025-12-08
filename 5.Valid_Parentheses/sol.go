@@ -45,9 +45,13 @@ import (
 func IsValid(s string) bool {
 	st := []int{}
 	pairs := map[rune]rune{
-		'(': ')',
-		'[': ']',
-		'{': '}',
+		')': '(',
+		']': '[',
+		'}': '{',
+	}
+
+	for _, val := range(s) {
+		if (pairs[val]) 
 	}
 	return false
 }

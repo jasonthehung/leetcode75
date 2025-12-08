@@ -70,8 +70,6 @@ def is_valid1(s: str) -> bool:
 def is_valid(s):
     # TODO: Implement your solution here.
     return False
-
-
 # <PRACTICE_END>
 # endregion
 
