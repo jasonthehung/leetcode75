@@ -62,7 +62,6 @@ func ContainsDuplicate(nums []int) bool {
 	// TODO: Implement your solution here.
 	return false
 }
-
 // <PRACTICE_END>
 // #endregion
 

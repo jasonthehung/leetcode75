@@ -57,8 +57,6 @@ def two_sum1(nums: List[int], target: int) -> List[int]:
 def two_sum(nums, target):
     # TODO: Implement your solution here.
     return []
-
-
 # <PRACTICE_END>
 # endregion
 

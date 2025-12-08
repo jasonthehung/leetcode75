@@ -47,8 +47,6 @@ def contains_duplicate_1(nums: list[int]) -> bool:
 def contains_duplicate(nums):
     # TODO: Implement your solution here.
     return False
-
-
 # <PRACTICE_END>
 # endregion
 
