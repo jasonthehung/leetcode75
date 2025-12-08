@@ -32,7 +32,45 @@ import (
 // ======================================================================
 
 // #region [📚 Reference Solutions] (Solutions hidden as requested)
-// (Focus on implementing your own logic in the Practice Area below!)
+
+func IsValid1(s string) bool {
+	// Stack of runes (characters)
+	stack := []rune{}
+
+	// Map: Closing -> Opening
+	pairs := map[rune]rune{
+		')': '(',
+		']': '[',
+		'}': '{',
+	}
+
+	for _, char := range s {
+		// Check if the character is a closing bracket
+		if expectedOpen, isClose := pairs[char]; isClose {
+			// Case 1: Stack is empty but we found a closing bracket -> Invalid
+			if len(stack) == 0 {
+				return false
+			}
+
+			// Case 2: Pop from stack
+			lastIndex := len(stack) - 1
+			topElement := stack[lastIndex]
+			stack = stack[:lastIndex] // Remove last element
+
+			// Case 3: Check if they match
+			if topElement != expectedOpen {
+				return false
+			}
+		} else {
+			// It is an opening bracket, push to stack
+			stack = append(stack, char)
+		}
+	}
+
+	// If stack is empty, it means all brackets were matched correctly
+	return len(stack) == 0
+}
+
 // #endregion
 
 // ======================================================================
@@ -43,16 +81,7 @@ import (
 // ======================================================================
 // <PRACTICE_START>
 func IsValid(s string) bool {
-	st := []int{}
-	pairs := map[rune]rune{
-		')': '(',
-		']': '[',
-		'}': '{',
-	}
-
-	for _, val := range(s) {
-		if (pairs[val]) 
-	}
+	// TODO: Implement your solution here.
 	return false
 }
 
