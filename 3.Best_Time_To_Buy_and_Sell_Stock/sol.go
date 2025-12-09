@@ -70,7 +70,6 @@ func MaxProfit(prices []int) int {
 	// TODO: Implement your solution here.
 	return 0
 }
-
 // <PRACTICE_END>
 // #endregion
 

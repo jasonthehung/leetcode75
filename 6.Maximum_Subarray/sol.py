@@ -54,8 +54,6 @@ def max_sub_array1(nums: List[int]) -> int:
 def max_sub_array(nums):
     # TODO: Implement your solution here.
     return 0
-
-
 # <PRACTICE_END>
 # endregion
 

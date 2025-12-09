@@ -62,8 +62,6 @@ def is_anagram1(s: str, t: str) -> bool:
 def is_anagram(s, t):
     # TODO: Implement your solution here.
     return False
-
-
 # <PRACTICE_END>
 # endregion
 

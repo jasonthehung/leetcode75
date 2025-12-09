@@ -62,8 +62,24 @@ func ProductExceptSelf1(nums []int) []int {
 // ======================================================================
 // <PRACTICE_START>
 func ProductExceptSelf(nums []int) []int {
-	// TODO: Implement your solution here.
-	return []int{}
+	n := len(nums)
+	ans := make([]int, n)
+	for i := range n {
+		ans[i] = 1
+	}
+
+	leftProduct := 1
+	for i := range n {
+		ans[i] = leftProduct * ans[i]
+		leftProduct = leftProduct * nums[i]
+	}
+
+	rightProduct := 1
+	for i := n - 1; i >= 0; i-- {
+		ans[i] = rightProduct * ans[i]
+		rightProduct = rightProduct * nums[i]
+	}
+	return ans
 }
 
 // <PRACTICE_END>

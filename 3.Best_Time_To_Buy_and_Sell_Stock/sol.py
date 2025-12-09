@@ -58,8 +58,6 @@ def max_profit1(prices: List[int]) -> int:
 def max_profit(prices):
     # TODO: Implement your solution here.
     return 0
-
-
 # <PRACTICE_END>
 # endregion
 

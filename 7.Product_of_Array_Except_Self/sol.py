@@ -58,8 +58,6 @@ def product_except_self1(nums: List[int]) -> List[int]:
 def product_except_self(nums):
     # TODO: Implement your solution here.
     return []
-
-
 # <PRACTICE_END>
 # endregion
 

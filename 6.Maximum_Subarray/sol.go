@@ -70,7 +70,6 @@ func MaxSubArray(nums []int) int {
 	// TODO: Implement your solution here.
 	return 0
 }
-
 // <PRACTICE_END>
 // #endregion
 
