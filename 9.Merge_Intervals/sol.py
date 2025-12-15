@@ -1,52 +1,27 @@
 import os
 import sys
-from typing import List
 
 # ======================================================================
-# 🧠 CHALLENGE: Product of Array Except Self (Python Version)
+# 🧠 CHALLENGE: Merge Intervals (Python Version)
 # ======================================================================
 # Description:
-# Given an integer array `nums`, return an array `answer` such that
-# `answer[i]` is equal to the product of all the elements of `nums`
-# except `nums[i]`.
+# Given an array of `intervals` where intervals[i] = [start_i, end_i],
+# merge all overlapping intervals, and return an array of the
+# non-overlapping intervals that cover all the intervals in the input.
 #
 # 📋 Rules:
-# 1. You must write an algorithm that runs in O(n) time.
-# 2. You CANNOT use the division operation.
-# 3. Follow up: Can you solve it with O(1) extra space complexity?
-#    (The output array does not count as extra space).
+# 1. Intervals [a, b] and [c, d] overlap if a <= d and c <= b.
+# 2. Intervals touching at boundaries (e.g., [1,4] and [4,5]) are considered overlapping.
+# 3. The input intervals might not be sorted.
 #
 # 💡 Examples:
-# - product_except_self([1,2,3,4])       => [24,12,8,6]
-# - product_except_self([-1,1,0,-3,3])   => [0,0,9,0,0]
+# - merge([[1,3],[2,6],[8,10],[15,18]]) => [[1,6],[8,10],[15,18]]
+# - merge([[1,4],[4,5]])                => [[1,5]]
+# - merge([[4,7],[1,4]])                => [[1,7]]
 # ======================================================================
 
 # region [📚 Reference Solutions] (Solutions hidden as requested)
-
-
-def product_except_self1(nums: List[int]) -> List[int]:
-    n = len(nums)
-    answer = [1] * n
-
-    # 1. Left Pass
-    for i in range(1, n):
-        answer[i] = answer[i - 1] * nums[i - 1]
-
-    # 2. Right Pass (修正部分)
-    right_product = 1
-
-    # 從最後一個元素開始 (n-1)，一路走到 0
-    for i in range(n - 1, -1, -1):
-        # 關鍵：是「乘上去」(*=)，不是「覆蓋」(=)
-        # answer[i] 目前是左邊積，right_product 是右邊積
-        answer[i] *= right_product
-
-        # 更新累積的右邊積
-        right_product *= nums[i]
-
-    return answer
-
-
+# (Focus on implementing your own logic in the Practice Area below!)
 # endregion
 
 
@@ -55,7 +30,7 @@ def product_except_self1(nums: List[int]) -> List[int]:
 #  Please write your solution between the markers below.
 # ======================================================================
 # <PRACTICE_START>
-def product_except_self(nums):
+def merge(intervals):
     # TODO: Implement your solution here.
     return []
 # <PRACTICE_END>
@@ -72,7 +47,7 @@ def reset_practice_area():
     MARKER_END = "# <PRACTICE_" + "END>"
 
     default_code_lines = [
-        "def product_except_self(nums):\n",
+        "def merge(intervals):\n",
         "    # TODO: Implement your solution here.\n",
         "    return []\n",
     ]
@@ -106,34 +81,44 @@ def reset_practice_area():
 
 if __name__ == "__main__":
     test_cases = [
-        ([1, 2, 3, 4], [24, 12, 8, 6]),
-        ([-1, 1, 0, -3, 3], [0, 0, 9, 0, 0]),
-        ([0, 0], [0, 0]),  # Double zero case
-        ([1, 0], [0, 1]),  # Single zero case
+        ([[1, 3], [2, 6], [8, 10], [15, 18]], [[1, 6], [8, 10], [15, 18]]),
+        ([[1, 4], [4, 5]], [[1, 5]]),
+        ([[4, 7], [1, 4]], [[1, 7]]),  # Unsorted input
+        ([[1, 4], [0, 4]], [[0, 4]]),
+        ([[1, 4], [2, 3]], [[1, 4]]),  # One interval fully inside another
     ]
 
-    print(f"\n🧪 Testing your [product_except_self] function...\n")
+    print(f"\n🧪 Testing your [merge] function...\n")
 
-    header = f"{'Input nums':<25} | {'Expected':<20} | {'Actual':<20} | Status"
+    header = f"{'Input Intervals':<30} | {'Expected':<20} | {'Actual':<20} | Status"
     print(header)
     print("-" * len(header))
 
     all_pass = True
-    for nums, expected in test_cases:
+    for intervals, expected in test_cases:
         try:
-            result = product_except_self(nums)
+            # Pass a copy to avoid side-effects if user sorts in-place
+            result = merge([x[:] for x in intervals])
         except Exception as e:
             result = "Error"
 
-        is_match = result == expected
+        # Compare results (Sorting usually required for deterministic comparison)
+        is_match = False
+        try:
+            if isinstance(result, list):
+                # We expect the result to be sorted by start time naturally
+                is_match = result == expected
+        except:
+            is_match = False
+
         status_icon = "✅ PASS" if is_match else "❌ FAIL"
         if not is_match:
             all_pass = False
 
         # Format output
-        nums_str = str(nums)
-        if len(nums_str) > 23:
-            nums_str = nums_str[:20] + "..."
+        inp_str = str(intervals)
+        if len(inp_str) > 28:
+            inp_str = inp_str[:25] + "..."
         exp_str = str(expected)
         if len(exp_str) > 18:
             exp_str = exp_str[:15] + "..."
@@ -141,7 +126,7 @@ if __name__ == "__main__":
         if len(res_str) > 18:
             res_str = res_str[:15] + "..."
 
-        print(f"{nums_str:<25} | {exp_str:<20} | {res_str:<20} | {status_icon}")
+        print(f"{inp_str:<30} | {exp_str:<20} | {res_str:<20} | {status_icon}")
 
     print("-" * len(header))
     if all_pass:

@@ -27,7 +27,7 @@ from typing import List
 
 def three_sum1(nums: List[int]) -> List[List[int]]:
     """
-    Method: Sorting + Two Pointers
+    Method: Sorting + Two Pointersg
     Complexity: Time O(N^2) | Space O(1) (depending on sort implementation)
     """
     nums.sort()
@@ -84,8 +84,6 @@ def three_sum1(nums: List[int]) -> List[List[int]]:
 def three_sum(nums):
     # TODO: Implement your solution here.
     return []
-
-
 # <PRACTICE_END>
 # endregion
 
