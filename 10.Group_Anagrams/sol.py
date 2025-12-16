@@ -1,6 +1,7 @@
-import collections
 import os
 import sys
+from collections import defaultdict
+from typing import List
 
 # ======================================================================
 # 🧠 CHALLENGE: Group Anagrams (Python Version)
@@ -23,8 +24,52 @@ import sys
 # - group_anagrams(["a"]) => [["a"]]
 # ======================================================================
 
+
 # region [📚 Reference Solutions] (Solutions hidden as requested)
-# (Focus on implementing your own logic in the Practice Area below!)
+def group_anagrams1(strs: List[str]) -> List[List[str]]:
+    """
+    Method: Sorting + Hash Map
+    Complexity: Time O(N * K log K) | Space O(N * K)
+    (N = number of strings, K = max length of a string)
+    """
+    # Key: Sorted String (e.g., "aet")
+    # Value: List of original strings (e.g., ["eat", "tea", "ate"])
+    anagram_map = defaultdict(list)
+
+    for word in strs:
+        # 1. Generate the key by sorting characters
+        # sorted("eat") becomes ['a', 'e', 't']
+        # "".join(...) turns it back into "aet"
+        sorted_key = "".join(sorted(word))
+
+        # 2. Append the original word to the correct group
+        anagram_map[sorted_key].append(word)
+
+    # 3. Return just the groups (values)
+    return list(anagram_map.values())
+
+
+def group_anagrams2(strs: list[str]) -> list[list[str]]:
+    # 建議改名為 groups 或 anagram_map
+    groups = defaultdict(list)
+
+    for word in strs:
+        # 1. 建立計數陣列 (Frequency Array)
+        # 這裡用 List 是為了可以修改內容
+        count = [0] * 26
+
+        for char in word:
+            count[ord(char) - ord("a")] += 1
+
+        # 2. 關鍵：轉成 Tuple 才能當 Dictionary Key
+        # key 像是 (1, 0, 0, 0, 1, ..., 0)
+        key = tuple(count)
+
+        groups[key].append(word)
+
+    return list(groups.values())
+
+
 # endregion
 
 
@@ -34,8 +79,16 @@ import sys
 # ======================================================================
 # <PRACTICE_START>
 def group_anagrams(strs):
-    # TODO: Implement your solution here.
-    return []
+    dict = defaultdict(list)
+
+    for word in strs:
+        lst = [0] * 26
+        for char in word:
+            lst[ord(char) - ord("a")] += 1
+        lst = tuple(lst)
+        dict[lst].append(word)
+
+    return list(dict.values())
 
 
 # <PRACTICE_END>
