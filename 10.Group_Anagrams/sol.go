@@ -3,66 +3,31 @@ package main
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"runtime"
 	"sort"
 	"strings"
 )
 
 // ======================================================================
-// 🧠 CHALLENGE: Merge Intervals (Go Version)
+// 🧠 CHALLENGE: Group Anagrams (Go Version)
 // ======================================================================
 // Description:
-// Given an array of `intervals` where intervals[i] = [start_i, end_i],
-// merge all overlapping intervals, and return an array of the
-// non-overlapping intervals that cover all the intervals in the input.
+// Given an array of strings `strs`, group the anagrams together.
+// You can return the answer in any order.
 //
 // 📋 Rules:
-// 1. Intervals [a, b] and [c, d] overlap if a <= d and c <= b.
-// 2. Intervals touching at boundaries (e.g., [1,4] and [4,5]) are considered overlapping.
-// 3. The input intervals might not be sorted.
+// 1. Return a slice of slices, where each inner slice contains words that are anagrams.
+// 2. The order of the groups and the order of words within groups does not matter.
 //
 // 💡 Examples:
-// - Merge([[1,3],[2,6],[8,10],[15,18]]) => [[1,6],[8,10],[15,18]]
-// - Merge([[1,4],[4,5]])                => [[1,5]]
-// - Merge([[4,7],[1,4]])                => [[1,7]]
+// - GroupAnagrams(["eat","tea","tan","ate","nat","bat"])
+//   => [["bat"],["nat","tan"],["ate","eat","tea"]]
+// - GroupAnagrams([""])  => [[""]]
+// - GroupAnagrams(["a"]) => [["a"]]
 // ======================================================================
 
 // #region [📚 Reference Solutions] (Solutions hidden as requested)
-func Merge1(intervals [][]int) [][]int {
-	if len(intervals) <= 1 {
-		return intervals
-	}
-
-	// 1. Sort by start time
-	sort.Slice(intervals, func(i, j int) bool {
-		return intervals[i][0] < intervals[j][0]
-	})
-
-	merged := [][]int{}
-	merged = append(merged, intervals[0])
-
-	for _, current := range intervals[1:] {
-		// Get the last interval in the merged list
-		// In Go, slices are references, so modifying 'last' elements affects 'merged'
-		lastIndex := len(merged) - 1
-		last := merged[lastIndex]
-
-		// 2. Check overlap
-		if current[0] <= last[1] {
-			// Merge logic: Update the end time if needed
-			if current[1] > last[1] {
-				merged[lastIndex][1] = current[1]
-			}
-		} else {
-			// No overlap
-			merged = append(merged, current)
-		}
-	}
-
-	return merged
-}
-
+// (Focus on implementing your own logic in the Practice Area below!)
 // #endregion
 
 // ======================================================================
@@ -72,9 +37,9 @@ func Merge1(intervals [][]int) [][]int {
 //
 // ======================================================================
 // <PRACTICE_START>
-func Merge(intervals [][]int) [][]int {
+func GroupAnagrams(strs []string) [][]string {
 	// TODO: Implement your solution here.
-	return [][]int{}
+	return [][]string{}
 }
 
 // <PRACTICE_END>
@@ -89,68 +54,87 @@ func main() {
 }
 
 type TestCase struct {
-	intervals [][]int
-	expected  [][]int
+	strs     []string
+	expected [][]string
 }
 
 func runTests() {
 	testCases := []TestCase{
-		{[][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}}, [][]int{{1, 6}, {8, 10}, {15, 18}}},
-		{[][]int{{1, 4}, {4, 5}}, [][]int{{1, 5}}},
-		{[][]int{{4, 7}, {1, 4}}, [][]int{{1, 7}}},
-		{[][]int{{1, 4}, {0, 4}}, [][]int{{0, 4}}},
-		{[][]int{{1, 4}, {2, 3}}, [][]int{{1, 4}}},
+		{
+			[]string{"eat", "tea", "tan", "ate", "nat", "bat"},
+			[][]string{{"bat"}, {"nat", "tan"}, {"ate", "eat", "tea"}},
+		},
+		{
+			[]string{""},
+			[][]string{{""}},
+		},
+		{
+			[]string{"a"},
+			[][]string{{"a"}},
+		},
 	}
 
-	fmt.Printf("\n🧪 Testing your [Merge] function...\n\n")
+	fmt.Printf("\n🧪 Testing your [GroupAnagrams] function...\n\n")
 
-	header := fmt.Sprintf("%-30s | %-20s | %-20s | Status", "Input Intervals", "Expected", "Actual")
+	header := fmt.Sprintf("%-30s | %-10s", "Input strs", "Status")
 	fmt.Println(header)
-	fmt.Println(strings.Repeat("-", len(header)))
+	fmt.Println(strings.Repeat("-", 45))
 
 	allPass := true
 
 	for _, tc := range testCases {
-		// Deep copy input to avoid modification side effects in test display
-		inputCopy := make([][]int, len(tc.intervals))
-		for i, v := range tc.intervals {
-			row := make([]int, len(v))
-			copy(row, v)
-			inputCopy[i] = row
+		result := GroupAnagrams(tc.strs)
+
+		// Canonicalize results for comparison
+		canonicalize := func(input [][]string) string {
+			if len(input) == 0 {
+				return "[]"
+			}
+			// Copy to sort safely
+			copySlice := make([][]string, len(input))
+			for i, v := range input {
+				innerCopy := make([]string, len(v))
+				copy(innerCopy, v)
+				sort.Strings(innerCopy)
+				copySlice[i] = innerCopy
+			}
+
+			// Sort the groups themselves for deterministic comparison
+			sort.Slice(copySlice, func(i, j int) bool {
+				// Sort by the first element of each group (since inner groups are sorted)
+				if len(copySlice[i]) > 0 && len(copySlice[j]) > 0 {
+					return copySlice[i][0] < copySlice[j][0]
+				}
+				return len(copySlice[i]) < len(copySlice[j])
+			})
+			return fmt.Sprintf("%v", copySlice)
 		}
 
-		result := Merge(inputCopy)
+		resStr := canonicalize(result)
+		expStr := canonicalize(tc.expected)
 
-		isMatch := reflect.DeepEqual(result, tc.expected)
+		isMatch := resStr == expStr
 		statusIcon := "✅ PASS"
 		if !isMatch {
 			statusIcon = "❌ FAIL"
 			allPass = false
 		}
 
-		// Helper to format slices
-		fmtSlice := func(s [][]int) string {
-			return fmt.Sprintf("%v", s)
+		// Helper to format string for display
+		inputStr := fmt.Sprintf("%v", tc.strs)
+		if len(inputStr) > 28 {
+			inputStr = inputStr[:25] + "..."
 		}
 
-		inpStr := fmtSlice(tc.intervals)
-		if len(inpStr) > 28 {
-			inpStr = inpStr[:25] + "..."
+		fmt.Printf("%-30s | %s\n", inputStr, statusIcon)
+		if !isMatch {
+			// Print details if failed, as simple table might not show enough
+			fmt.Printf("   Expected: %v\n", tc.expected)
+			fmt.Printf("   Actual:   %v\n", result)
 		}
-		expStr := fmtSlice(tc.expected)
-		if len(expStr) > 18 {
-			expStr = expStr[:15] + "..."
-		}
-		resStr := fmtSlice(result)
-		if len(resStr) > 18 {
-			resStr = resStr[:15] + "..."
-		}
-
-		fmt.Printf("%-30s | %-20s | %-20s | %s\n",
-			inpStr, expStr, resStr, statusIcon)
 	}
 
-	fmt.Println(strings.Repeat("-", len(header)))
+	fmt.Println(strings.Repeat("-", 45))
 
 	if allPass {
 		fmt.Println("\n🎉 Fantastic! All test cases passed.")
@@ -167,9 +151,9 @@ func resetPracticeArea() {
 	markerEnd := "// <PRACTICE_" + "END>"
 
 	defaultCode := []string{
-		"func Merge(intervals [][]int) [][]int {",
+		"func GroupAnagrams(strs []string) [][]string {",
 		"\t// TODO: Implement your solution here.",
-		"\treturn [][]int{}",
+		"\treturn [][]string{}",
 		"}",
 	}
 
