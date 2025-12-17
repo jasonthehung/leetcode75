@@ -81,30 +81,8 @@ func IsValid1(s string) bool {
 // ======================================================================
 // <PRACTICE_START>
 func IsValid(s string) bool {
-	st := []rune{}
-	pairs := map[rune]rune{
-		')': '(',
-		']': '[',
-		'}': '{',
-	}
-
-	for _, char := range s {
-		if _, exist := pairs[char]; exist {
-			if len(st) == 0 {
-				return false
-			}
-
-			top := st[len(st)-1]
-			st = st[:len(st)-1]
-
-			if top != pairs[char] {
-				return false
-			}
-		} else {
-			st = append(st, char)
-		}
-	}
-	return len(st) == 0
+	// TODO: Implement your solution here.
+	return false
 }
 
 // <PRACTICE_END>

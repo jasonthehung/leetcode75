@@ -31,8 +31,20 @@ import sys
 # ======================================================================
 # <PRACTICE_START>
 def merge(intervals):
-    # TODO: Implement your solution here.
-    return []
+    if not intervals:
+        return []
+
+    result = [intervals[0]]
+
+    for interval in intervals[1:]:
+        if result[-1][1] < interval[0]:
+            result.append(interval)
+        else:
+            result[-1][1] = max(result[-1][1], interval[0])
+
+    return result
+
+
 # <PRACTICE_END>
 # endregion
 

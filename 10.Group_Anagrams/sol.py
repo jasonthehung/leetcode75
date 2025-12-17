@@ -79,18 +79,8 @@ def group_anagrams2(strs: list[str]) -> list[list[str]]:
 # ======================================================================
 # <PRACTICE_START>
 def group_anagrams(strs):
-    dict = defaultdict(list)
-
-    for word in strs:
-        lst = [0] * 26
-        for char in word:
-            lst[ord(char) - ord("a")] += 1
-        lst = tuple(lst)
-        dict[lst].append(word)
-
-    return list(dict.values())
-
-
+    # TODO: Implement your solution here.
+    return []
 # <PRACTICE_END>
 # endregion
 

@@ -41,7 +41,6 @@ func GroupAnagrams(strs []string) [][]string {
 	// TODO: Implement your solution here.
 	return [][]string{}
 }
-
 // <PRACTICE_END>
 // #endregion
 
