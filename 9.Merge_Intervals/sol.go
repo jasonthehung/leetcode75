@@ -73,7 +73,7 @@ func Merge1(intervals [][]int) [][]int {
 // ======================================================================
 // <PRACTICE_START>
 func Merge(intervals [][]int) [][]int {
-	// TODO: Implement your solution here.
+
 	return [][]int{}
 }
 

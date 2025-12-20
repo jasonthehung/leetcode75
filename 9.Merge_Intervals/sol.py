@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import List
 
 # ======================================================================
 # 🧠 CHALLENGE: Merge Intervals (Python Version)
@@ -23,7 +24,7 @@ import sys
 # region [📚 Reference Solutions] (Solutions hidden as requested)
 
 
-def merge(intervals: List[List[int]]) -> List[List[int]]:
+def merge1(intervals: List[List[int]]) -> List[List[int]]:
     # 1. Edge Case: Empty list
     if not intervals:
         return []
