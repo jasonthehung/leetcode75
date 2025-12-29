@@ -3,66 +3,33 @@ package main
 import (
 	"fmt"
 	"os"
-	"reflect"
 	"runtime"
-	"sort"
 	"strings"
 )
 
 // ======================================================================
-// 🧠 CHALLENGE: Merge Intervals (Go Version)
+// 🧠 CHALLENGE: Search in Rotated Sorted Array (Go Version)
 // ======================================================================
 // Description:
-// Given an array of `intervals` where intervals[i] = [start_i, end_i],
-// merge all overlapping intervals, and return an array of the
-// non-overlapping intervals that cover all the intervals in the input.
+// There is an integer array `nums` sorted in ascending order (with distinct values).
+// Prior to being passed to your function, `nums` is possibly rotated at an
+// unknown index k.
+//
+// Given the array `nums` after the possible rotation and an integer `target`,
+// return the index of `target` if it is in `nums`, or -1 if it is not.
 //
 // 📋 Rules:
-// 1. Intervals [a, b] and [c, d] overlap if a <= d and c <= b.
-// 2. Intervals touching at boundaries (e.g., [1,4] and [4,5]) are considered overlapping.
-// 3. The input intervals might not be sorted.
+// 1. You must write an algorithm with O(log n) runtime complexity.
+// 2. Return the index of the target, or -1.
 //
 // 💡 Examples:
-// - Merge([[1,3],[2,6],[8,10],[15,18]]) => [[1,6],[8,10],[15,18]]
-// - Merge([[1,4],[4,5]])                => [[1,5]]
-// - Merge([[4,7],[1,4]])                => [[1,7]]
+// - Search([4,5,6,7,0,1,2], 0) => 4
+// - Search([4,5,6,7,0,1,2], 3) => -1
+// - Search([1], 0)             => -1
 // ======================================================================
 
 // #region [📚 Reference Solutions] (Solutions hidden as requested)
-func Merge1(intervals [][]int) [][]int {
-	if len(intervals) <= 1 {
-		return intervals
-	}
-
-	// 1. Sort by start time
-	sort.Slice(intervals, func(i, j int) bool {
-		return intervals[i][0] < intervals[j][0]
-	})
-
-	merged := [][]int{}
-	merged = append(merged, intervals[0])
-
-	for _, current := range intervals[1:] {
-		// Get the last interval in the merged list
-		// In Go, slices are references, so modifying 'last' elements affects 'merged'
-		lastIndex := len(merged) - 1
-		last := merged[lastIndex]
-
-		// 2. Check overlap
-		if current[0] <= last[1] {
-			// Merge logic: Update the end time if needed
-			if current[1] > last[1] {
-				merged[lastIndex][1] = current[1]
-			}
-		} else {
-			// No overlap
-			merged = append(merged, current)
-		}
-	}
-
-	return merged
-}
-
+// (Focus on implementing your own logic in the Practice Area below!)
 // #endregion
 
 // ======================================================================
@@ -72,9 +39,9 @@ func Merge1(intervals [][]int) [][]int {
 //
 // ======================================================================
 // <PRACTICE_START>
-func Merge(intervals [][]int) [][]int {
-
-	return [][]int{}
+func Search(nums []int, target int) int {
+	// TODO: Implement your solution here.
+	return -1
 }
 
 // <PRACTICE_END>
@@ -89,39 +56,34 @@ func main() {
 }
 
 type TestCase struct {
-	intervals [][]int
-	expected  [][]int
+	nums     []int
+	target   int
+	expected int
 }
 
 func runTests() {
 	testCases := []TestCase{
-		{[][]int{{1, 3}, {2, 6}, {8, 10}, {15, 18}}, [][]int{{1, 6}, {8, 10}, {15, 18}}},
-		{[][]int{{1, 4}, {4, 5}}, [][]int{{1, 5}}},
-		{[][]int{{4, 7}, {1, 4}}, [][]int{{1, 7}}},
-		{[][]int{{1, 4}, {0, 4}}, [][]int{{0, 4}}},
-		{[][]int{{1, 4}, {2, 3}}, [][]int{{1, 4}}},
+		{[]int{4, 5, 6, 7, 0, 1, 2}, 0, 4},
+		{[]int{4, 5, 6, 7, 0, 1, 2}, 3, -1},
+		{[]int{1}, 0, -1},
+		{[]int{1}, 1, 0},
+		{[]int{3, 1}, 1, 1},
+		{[]int{5, 1, 3}, 5, 0},
+		{[]int{4, 5, 6, 7, 8, 1, 2, 3}, 8, 4},
 	}
 
-	fmt.Printf("\n🧪 Testing your [Merge] function...\n\n")
+	fmt.Printf("\n🧪 Testing your [Search] function...\n\n")
 
-	header := fmt.Sprintf("%-30s | %-20s | %-20s | Status", "Input Intervals", "Expected", "Actual")
+	header := fmt.Sprintf("%-25s | %-6s | %-10s | %-10s | Status", "Input nums", "Target", "Expected", "Actual")
 	fmt.Println(header)
 	fmt.Println(strings.Repeat("-", len(header)))
 
 	allPass := true
 
 	for _, tc := range testCases {
-		// Deep copy input to avoid modification side effects in test display
-		inputCopy := make([][]int, len(tc.intervals))
-		for i, v := range tc.intervals {
-			row := make([]int, len(v))
-			copy(row, v)
-			inputCopy[i] = row
-		}
+		result := Search(tc.nums, tc.target)
 
-		result := Merge(inputCopy)
-
-		isMatch := reflect.DeepEqual(result, tc.expected)
+		isMatch := result == tc.expected
 		statusIcon := "✅ PASS"
 		if !isMatch {
 			statusIcon = "❌ FAIL"
@@ -129,25 +91,17 @@ func runTests() {
 		}
 
 		// Helper to format slices
-		fmtSlice := func(s [][]int) string {
+		fmtSlice := func(s []int) string {
 			return fmt.Sprintf("%v", s)
 		}
 
-		inpStr := fmtSlice(tc.intervals)
-		if len(inpStr) > 28 {
-			inpStr = inpStr[:25] + "..."
-		}
-		expStr := fmtSlice(tc.expected)
-		if len(expStr) > 18 {
-			expStr = expStr[:15] + "..."
-		}
-		resStr := fmtSlice(result)
-		if len(resStr) > 18 {
-			resStr = resStr[:15] + "..."
+		numsStr := fmtSlice(tc.nums)
+		if len(numsStr) > 23 {
+			numsStr = numsStr[:20] + "..."
 		}
 
-		fmt.Printf("%-30s | %-20s | %-20s | %s\n",
-			inpStr, expStr, resStr, statusIcon)
+		fmt.Printf("%-25s | %-6d | %-10v | %-10v | %s\n",
+			numsStr, tc.target, tc.expected, result, statusIcon)
 	}
 
 	fmt.Println(strings.Repeat("-", len(header)))
@@ -167,9 +121,9 @@ func resetPracticeArea() {
 	markerEnd := "// <PRACTICE_" + "END>"
 
 	defaultCode := []string{
-		"func Merge(intervals [][]int) [][]int {",
+		"func Search(nums []int, target int) int {",
 		"\t// TODO: Implement your solution here.",
-		"\treturn [][]int{}",
+		"\treturn -1",
 		"}",
 	}
 

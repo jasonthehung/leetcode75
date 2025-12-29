@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import List
 
 # ======================================================================
 # 🧠 CHALLENGE: Merge Intervals (Python Version)
@@ -21,7 +22,36 @@ import sys
 # ======================================================================
 
 # region [📚 Reference Solutions] (Solutions hidden as requested)
-# (Focus on implementing your own logic in the Practice Area below!)
+
+
+def merge1(intervals: List[List[int]]) -> List[List[int]]:
+    # 1. Edge Case: Empty list
+    if not intervals:
+        return []
+
+    # 2. Sort by start time
+    intervals.sort(key=lambda x: x[0])
+
+    result = [intervals[0]]
+
+    # Skip the first one since it's already in result
+    for interval in intervals[1:]:
+        last_end = result[-1][1]
+        current_start = interval[0]
+        current_end = interval[1]
+
+        # 3. Check for overlap
+        # 正確邏輯：如果當前的「開始」比上一段的「結束」還晚，代表沒有重疊
+        if current_start > last_end:
+            result.append(interval)
+        else:
+            # 重疊了！合併方式是更新結尾
+            # 取兩者結尾的最大值
+            result[-1][1] = max(last_end, current_end)
+
+    return result
+
+
 # endregion
 
 
@@ -31,6 +61,7 @@ import sys
 # ======================================================================
 # <PRACTICE_START>
 def merge(intervals):
+<<<<<<< HEAD
     if not intervals:
         return []
 
@@ -43,6 +74,10 @@ def merge(intervals):
             result[-1][1] = max(result[-1][1], interval[0])
 
     return result
+=======
+    # TODO: Implement your solution here.
+    return []
+>>>>>>> 56ccb298d58ba9d0e2d40e421207f9fee24ff253
 
 
 # <PRACTICE_END>
