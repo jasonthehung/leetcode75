@@ -81,7 +81,7 @@ func IsValid1(s string) bool {
 // ======================================================================
 // <PRACTICE_START>
 func IsValid(s string) bool {
-	// TODO: Implement your solution here.
+
 	return false
 }
 
